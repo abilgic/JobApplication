@@ -115,7 +115,7 @@ namespace JobApplication.Controllers
 
                 if (result.Succeeded)
                 {  // Add a user to the default role, or any role you prefer here
-                    await _userManager.AddToRoleAsync(user, "User");
+                    await _userManager.AddToRoleAsync(user, "Member");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToLocal(returnUrl);

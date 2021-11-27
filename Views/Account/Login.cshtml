@@ -9,13 +9,14 @@
 @inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Log in";
+    
 }
 <br />
 
 <div class="row">
     <div class="col-md-4">
         <section>
-            <form asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" style="width:315px;">
+            <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" style="width:315px;">
                 <h4>Use a local account to log in.</h4>
                 <hr />
                 <div class="form-group">
