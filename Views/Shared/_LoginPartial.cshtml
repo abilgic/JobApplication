@@ -1,5 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@using JobApplication.Models
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
@@ -8,8 +7,8 @@
 {
     <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
         <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="" asp-controller="Home" asp-action="Index">Hello @UserManager.GetUserName(User)!</a>
+            <li class="alert-link">
+                <a asp-area="" asp-controller="Home" asp-action="Index" class="btn btn-link navbar-btn navbar-link">Hello @UserManager.GetUserName(User)!</a>
             </li>
             <li>
                 <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
@@ -20,7 +19,7 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-        <li><a asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path">Log in</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-link navbar-btn navbar-link">Register</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Context.Request.Path" class="btn btn-link navbar-btn navbar-link">Log in</a></li>
     </ul>
 }

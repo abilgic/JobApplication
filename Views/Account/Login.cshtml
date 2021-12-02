@@ -1,12 +1,5 @@
-﻿@using System.Collections.Generic
-@using System.Linq
-@using Microsoft.AspNetCore.Http
-@using Microsoft.AspNetCore.Identity
+﻿@model LoginModel
 
-
-@model LoginModel
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
 @{
     ViewData["Title"] = "Log in";
     
@@ -17,7 +10,7 @@
     <div class="col-md-4">
         <section>
             <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post" style="width:315px;">
-                <h4>Use a local account to log in.</h4>
+                <h4>Log in</h4>
                 <hr />
                 <div class="form-group">
                     <label asp-for="Email" style="width:150px; display:inline-block;"></label>
