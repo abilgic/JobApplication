@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JobApplication.Repository
 {
-    public class JobService:Repository<Job>, IJobService
+    public class JobService:Repository<Job>, IJobService 
     {
         
         public JobService(ApplicationDbContext context) : base(context)
