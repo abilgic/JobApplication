@@ -1,42 +1,43 @@
-﻿
-@model IEnumerable<Job>
+﻿@model IEnumerable<Job>
 @{
     ViewData["Title"] = "Job List";
 }
 <div class="container">
     <div class="card-header">@ViewData["Title"]</div>
-    
-<div class="card-body">    
-    <button type="button" class="btn btn-primary" id="btnAdd" data-toggle="modal" data-target="#jobModal">
-        Add New Job
-    </button>
-    <table class="table" id="jobTable">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>CreateDate</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var e in Model)
+
+    <div class="card-body">
+        <button type="button" class="btn btn-primary" id="btnAdd" data-toggle="modal" data-target="#jobModal">
+            Add New Job
+        </button>
+        <table class="table" id="jobTable">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>CreateDate</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model)
                 {
-            <tr>
-                <td>@e.Id</td>
-                <td>@e.Name</td>
-                <td>@e.Description</td>
-                <td>@e.CreateDate</td>
-                <td text-right">
-                    <button data-id="@e.Id" type="button" class="btn btn-info btnEdit" data-toggle="modal" data-target="#jobModal">Edit</button>
-                    <button data-id="@e.Id" type="button" class="btn btn-danger btnDelete"> Delete</button>
-                </td>
-            </tr>
-                 }
-        </tbody>
-    </table>
-</div>
+                    <tr>
+                        <td>@e.Id</td>
+                        <td>@e.Name</td>
+                        <td>@e.Description</td>
+                        <td>@e.CreateDate</td>
+                        <td text-right">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button data-id="@e.Id" type="button" class="btn btn-info btnEdit" data-toggle="modal" data-target="#jobModal">Edit</button>
+                                <button data-id="@e.Id" type="button" class="btn btn-danger btnDelete"> Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <!-- Modal -->
@@ -53,7 +54,7 @@
                 <div class="form-group">
                     <label>Name</label>
                     <input type="hidden" id="hdnJobId" />
-                    <input type="text" name="Name" id="Name" class="form-control"/>
+                    <input type="text" name="Name" id="Name" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label>Description</label>
@@ -71,93 +72,94 @@
 </div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-            $("#jobTable").DataTable();
-            $("#btnUpdate").hide();
+<script>
+    $(document).ready(function () {
+        $("#jobTable").DataTable();
+        $("#btnUpdate").hide();
 
-            $(".btnEdit").click(function () {
-               
-                $("#jobModalLabel").text("Update Job");
-                $("#btnUpdate").show();
-                $("#btnSave").hide();
-                $("#jobModal").show();
-                jobId = $(this).attr("data-id")
-                
-                $.ajax({
-                    type: "GET",
-                    url: "/Home/GetJob",
-                    data: { id: jobId },
-                    dataType: 'JSON'
-                }).done(function (data) {
-                    if (data) {
-                        $("#hdnJobId").val(data.id);
-                        alert("hdnJobId-"+$("#hdnJobId").val());
-                        $("#Name").val(data.name);
-                        $("#Description").val(data.description);
-                    }
-                });
-            });          
+        $(".btnEdit").click(function () {
 
+            $("#jobModalLabel").text("Update Job");
+            $("#btnUpdate").show();
+            $("#btnSave").hide();
+            $("#jobModal").show();
+            jobId = $(this).attr("data-id");
 
-            $("#btnSave").click(function () {
-                var jsonInput = {
-                    name: $("#Name").val(),
-                    description: $("#Description").val()
-                };
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetJob",
+                data: { id: jobId },
+                dataType: 'JSON'
+            }).done(function (data) {
+                if (data) {
+                    $("#hdnJobId").val(data.id);
 
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/AddJob",
-                    data: { jobmodel: jsonInput},
-                    dataType: 'JSON'
-                }).done(function (data) {
-                    if (data) {
-                        alert("Job is saved!..");
-                        window.location.reload();
-                    }
-                });
-            });
-            
-
-            $("#btnUpdate").click(function () {
-                
-                var jsonInput = {
-                    id: $("#hdnJobId").val(),
-                    name: $("#Name").val(),
-                    description: $("#Description").val()
-                };
-                
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/UpdateJob",
-                    data: { jobmodel: jsonInput },
-                    dataType: 'JSON'
-                }).done(function (data) {
-                    if (data) {
-                        alert("Job is updated!..");
-                        window.location.reload();
-                    }
-                });
-            });
-
-            $(".btnDelete").click(function () {
-                if (confirm('Are you sure you want to delete this?')) {                
-                $.ajax({
-                    type: "POST",
-                    url: "/Home/DeleteJob",
-                    data: { id: $(this).attr("data-id") },
-                    
-                    dataType: 'JSON'
-                }).done(function (data) {
-                    if (data) {
-                        alert("Job is deleted!..");
-                        window.location.reload();
-                    }
-                });
+                    $("#Name").val(data.name);
+                    $("#Description").val(data.description);
                 }
             });
         });
 
-    </script>
+
+        $("#btnSave").click(function () {
+            var jsonInput = {
+                name: $("#Name").val(),
+                description: $("#Description").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/AddJob",
+                data: { jobmodel: jsonInput},
+                dataType: 'JSON'
+            }).done(function (data) {
+                if (data) {
+                    alert("Job is saved!..");
+                    window.location.reload();
+                }
+            });
+        });
+
+
+        $("#btnUpdate").click(function () {
+
+            var jsonInput = {
+                id: $("#hdnJobId").val(),
+                name: $("#Name").val(),
+                description: $("#Description").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/UpdateJob",
+                data: { jobmodel: jsonInput },
+                dataType: 'JSON'
+            }).done(function (data) {
+                if (data) {
+                    alert("Job is updated!..");
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(".btnDelete").click(function () {
+            if (confirm('Are you sure you want to delete this?')) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/DeleteJob",
+                data: { id: $(this).attr("data-id") },
+
+                dataType: 'JSON'
+            }).done(function (data) {
+                if (data) {
+                    alert("Job is deleted!..");
+                    window.location.reload();
+                }
+            });
+            }
+        });
+
+    });
+
+</script>
 }
