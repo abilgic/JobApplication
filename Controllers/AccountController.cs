@@ -80,6 +80,7 @@ namespace JobApplication.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -106,7 +107,8 @@ namespace JobApplication.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser {
+                var user = new ApplicationUser
+                {
                     UserName = model.Email,
                     Email = model.Email
                 };
@@ -114,7 +116,7 @@ namespace JobApplication.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
-                {  // Add a user to the default role, or any role you prefer here
+                {
                     await _userManager.AddToRoleAsync(user, "Member");
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
@@ -122,7 +124,7 @@ namespace JobApplication.Controllers
                 }
                 AddErrors(result);
             }
-            // If we got this far, something failed, redisplay form
+
             return View(model);
         }
 

@@ -15,28 +15,28 @@ namespace JobApplication.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IJobService _jobService;        
+        private readonly IJobService _jobService;
 
-        public HomeController(ILogger<HomeController> logger, IJobService jobService )
+        public HomeController(ILogger<HomeController> logger, IJobService jobService)
         {
             _logger = logger;
-            _jobService =jobService;
-            
+            _jobService = jobService;
+
         }
 
         [Authorize(Policy = "RequireAdminRole")]
         public async Task<IActionResult> Index()
         {
             var joblist = await _jobService.GetList();
-            return View(joblist); 
+            return View(joblist);
         }
 
-                
+
         [HttpPost]
         public async Task<JsonResult> AddJob(JobModel jobmodel)
         {
             // add job           
-            var result = await _jobService.AddJob(jobmodel);           
+            var result = await _jobService.AddJob(jobmodel);
 
             return Json(result);
         }
@@ -47,14 +47,14 @@ namespace JobApplication.Controllers
             // Get job
             var jobitem = await _jobService.GetJob(Id);
 
-            return  Json(jobitem);
+            return Json(jobitem);
         }
 
         [HttpPost]
         public async Task<JsonResult> UpdateJob(JobModel jobmodel)
         {
             // UpdateJob
-           var result= await  _jobService.UpdateJob(jobmodel);           
+            var result = await _jobService.UpdateJob(jobmodel);
 
             return Json(result);
         }

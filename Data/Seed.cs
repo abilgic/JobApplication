@@ -38,7 +38,7 @@ namespace JobApplication.Data
                     UserName = Configuration.GetSection("UserSettings")["UserEmail"],
                     Email = Configuration.GetSection("UserSettings")["UserEmail"]
                 };
-                string dbConn2 = Configuration.GetValue<string>("UserSettings:UserPassword");
+                
                 string userPassword = Configuration.GetSection("UserSettings")["UserPassword"];
                 var user = await UserManager.FindByEmailAsync(Configuration.GetSection("UserSettings")["UserEmail"]);
 
