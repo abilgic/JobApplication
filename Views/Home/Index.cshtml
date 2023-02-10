@@ -1,0 +1,165 @@
+﻿@model IEnumerable<Job>
+@{
+    ViewData["Title"] = "Job List";
+}
+<div class="container">
+    <div class="card-header">@ViewData["Title"]</div>
+
+    <div class="card-body">
+        <button type="button" class="btn btn-primary" id="btnAdd" data-toggle="modal" data-target="#jobModal">
+            Add New Job
+        </button>
+        <table class="table" id="jobTable">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>CreateDate</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in Model)
+                {
+                    <tr>
+                        <td>@e.Id</td>    
+                        <td>@e.Name</td>
+                        <td>@e.Description</td>
+                        <td>@e.CreateDate</td>
+                        <td text-right">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button data-id="@e.Id" type="button" class="btn btn-info btnEdit" data-toggle="modal" data-target="#jobModal">Edit</button>
+                                <button data-id="@e.Id" type="button" class="btn btn-danger btnDelete"> Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="jobModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="jobModalLabel">Add Job</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="hidden" id="hdnJobId" />
+                    <input type="text" name="Name" id="Name" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea type="text" name="Description" id="Description" rows="8" class="form-control">
+                    </textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+                <button type="button" id="btnUpdate" class="btn btn-primary">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        $("#jobTable").DataTable();
+        $("#btnUpdate").hide();
+
+        $(".btnEdit").click(function () {
+
+            $("#jobModalLabel").text("Update Job");
+            $("#btnUpdate").show();
+            $("#btnSave").hide();
+            $("#jobModal").show();
+            jobId = $(this).attr("data-id");
+
+            $.ajax({
+                type: "GET",
+                url: "/Home/GetJob",
+                data: { id: jobId },
+                dataType: 'JSON'
+            }).done(function (data) {
+                if (data) {
+                    $("#hdnJobId").val(data.id);
+
+                    $("#Name").val(data.name);
+                    $("#Description").val(data.description);
+                }
+            });
+        });
+
+
+        $("#btnSave").click(function () {
+            var jsonInput = {
+                name: $("#Name").val(),
+                description: $("#Description").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/AddJob",
+                data: { jobmodel: jsonInput},
+                dataType: 'JSON'
+            }).done(function (data) {
+                if (data) {
+                    alert("Job is saved!..");
+                    window.location.reload();
+                }
+            });
+        });
+
+
+        $("#btnUpdate").click(function () {
+
+            var jsonInput = {
+                id: $("#hdnJobId").val(),
+                name: $("#Name").val(),
+                description: $("#Description").val()
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/Home/UpdateJob",
+                data: { jobmodel: jsonInput },
+                dataType: 'JSON'
+            }).done(function (data) {
+                if (data) {
+                    alert("Job is updated!..");
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(".btnDelete").click(function () {
+            if (confirm('Are you sure you want to delete this?')) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/DeleteJob",
+                data: { id: $(this).attr("data-id") },
+
+                dataType: 'JSON'
+            }).done(function (data) {
+                if (data) {
+                    alert("Job is deleted!..");
+                    window.location.reload();
+                }
+            });
+            }
+        });
+
+    });
+
+</script>
+}
